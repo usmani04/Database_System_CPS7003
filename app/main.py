@@ -1,42 +1,53 @@
 from datetime import date
-from db.dal import DataAccessLayer
+from services.museum_service import MuseumService
+from security.auth import authenticate_user
 
-dal = DataAccessLayer()
 
-# Create museum
-dal.add_museum(
-    name="HeritagePlus Central Museum",
-    location="London"
-)
+def main():
+    try:
+        user = authenticate_user()
+        service = MuseumService(user)
 
-# Create exhibit (FIX: use date objects)
-dal.add_exhibit(
-    museum_id=1,
-    title="Ancient Civilisations",
-    description="Historical artefacts exhibition",
-    start_date=date(2024, 1, 1),
-    end_date=date(2024, 12, 31)
-)
+        print("\n--- HeritagePlus Museum Management System ---")
 
-# Create visitor
-dal.add_visitor(
-    full_name="John Smith",
-    age=32,
-    gender="Male",
-    country="UK"
-)
+        # Admin workflow
+        service.create_museum(
+            name="HeritagePlus Central Museum",
+            location="London"
+        )
 
-# Demonstrate queries
-print("\nExhibits with museums:")
-for row in dal.get_exhibits_with_museum():
-    print(row)
+        service.create_exhibit(
+            museum_id=1,
+            title="Ancient Civilisations",
+            description="Historical artefacts exhibition",
+            start_date=date(2024, 1, 1),
+            end_date=date(2024, 12, 31)
+        )
 
-print("\nVisitors by country:")
-for row in dal.visitors_by_country():
-    print(row)
+        # Visitor registration
+        service.register_visitor(
+            full_name="John Smith",
+            age=32,
+            gender="Male",
+            country="UK"
+        )
 
-print("\nVisit counts per exhibit:")
-for row in dal.visit_counts_per_exhibit():
-    print(row)
+        # Reports
+        print("\nTop Exhibits:")
+        for row in service.get_top_exhibits():
+            print(row)
 
-dal.close()
+        print("\nVisitors by Country:")
+        for row in service.get_visitors_by_country():
+            print(row)
+
+        service.close()
+
+    except PermissionError as e:
+        print("Access denied:", e)
+    except Exception as e:
+        print("Error:", e)
+
+
+if __name__ == "__main__":
+    main()
