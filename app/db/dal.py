@@ -72,6 +72,21 @@ class DataAccessLayer:
             .order_by(func.count(Visit.visit_id).desc())
             .all()
         )
+    
+    def update_conservation_status(self, record_id, condition_status):
+        record = (
+            self.session.query(ConservationRecord)
+            .filter(ConservationRecord.record_id == record_id)
+            .first()
+        )
+
+        if not record:
+            raise ValueError("Conservation record not found")
+
+        record.condition_status = condition_status
+        self.session.commit()
+        return record
+
 
     def close(self):
         self.session.close()
