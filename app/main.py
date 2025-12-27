@@ -32,6 +32,12 @@ def main():
             country="UK"
         )
 
+        service.record_visit(
+            visitor_id=1,
+            exhibit_id=1,
+            rating=5
+        )
+
         # Reports
         print("\nTop Exhibits:")
         for row in service.get_top_exhibits():

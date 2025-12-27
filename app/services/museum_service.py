@@ -67,6 +67,14 @@ class MuseumService:
             raise ValueError("Visitor name is required")
 
         return self.dal.add_visitor(full_name, age, gender, country)
+    
+    def record_visit(self, visitor_id, exhibit_id, rating):
+        if rating < 1 or rating > 5:
+            raise ValueError("Rating must be between 1 and 5")
+
+        return self.dal.add_visit(
+            visitor_id, exhibit_id, date.today(), rating
+        )
 
     def get_top_exhibits(self):
         return self.dal.visit_counts_per_exhibit()

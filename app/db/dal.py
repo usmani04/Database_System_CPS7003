@@ -60,6 +60,18 @@ class DataAccessLayer:
             .order_by(func.count(Visitor.visitor_id).desc())
             .all()
         )
+    
+    def add_visit(self, visitor_id, exhibit_id, visit_date, feedback_rating):
+        visit = Visit(
+            visitor_id=visitor_id,
+            exhibit_id=exhibit_id,
+            visit_date=visit_date,
+            feedback_rating=feedback_rating
+        )
+        self.session.add(visit)
+        self.session.commit()
+        return visit
+
 
     def visit_counts_per_exhibit(self):
         return (
