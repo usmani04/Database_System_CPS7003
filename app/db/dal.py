@@ -1,4 +1,4 @@
-from sqlalchemy import func
+from sqlalchemy import *
 from .base import SessionLocal
 from .models import (
     Museum, Exhibit, Artefact,
@@ -99,6 +99,28 @@ class DataAccessLayer:
         self.session.commit()
         return record
 
+    def add_artefact(self, exhibit_id, name, material, acquisition_date, origin):
+        artefact = Artefact(
+            exhibit_id=exhibit_id,
+            name=name,
+            material=material,
+            acquisition_date=acquisition_date,
+            origin=origin
+        )
+        self.session.add(artefact)
+        self.session.commit()
+        return artefact
+
+    def monthly_visit_trends(self):
+        return (
+            self.session.query(
+                extract("month", Visit.visit_date).label("month"),
+                func.count(Visit.visit_id).label("visits")
+            )
+            .group_by("month")
+            .order_by("month")
+            .all()
+        )
 
     def close(self):
         self.session.close()
