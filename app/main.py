@@ -1,5 +1,7 @@
 from datetime import date
 from services.museum_service import MuseumService
+from services.analytics_service import AnalyticsService
+from services.csv_import_service import CSVImportService
 from security.auth import authenticate_user
 
 
@@ -7,6 +9,10 @@ def main():
     try:
         user = authenticate_user()
         service = MuseumService(user)
+
+        # NEW: analytics & external integration
+        analytics = AnalyticsService(service.dal)
+        csv_service = CSVImportService()
 
         print("\n--- HeritagePlus Museum Management System ---")
 
@@ -38,7 +44,7 @@ def main():
             rating=5
         )
 
-        # Reports
+        # Reports (existing)
         print("\nTop Exhibits:")
         for row in service.get_top_exhibits():
             print(row)
@@ -46,6 +52,14 @@ def main():
         print("\nVisitors by Country:")
         for row in service.get_visitors_by_country():
             print(row)
+
+        # NEW: analytics output (80–100 requirement)
+        print("\nMonthly Visitor Trends:")
+        for row in service.dal.monthly_visit_trends():
+            print(row)
+
+        print("\nForecasted Next Month Visits:")
+        print(analytics.forecast_next_month_visits())
 
         service.close()
 

@@ -52,3 +52,23 @@ CREATE TABLE conservation_record (
     last_checked DATE,
     FOREIGN KEY (artefact_id) REFERENCES artefact(artefact_id)
 );
+
+CREATE INDEX IF NOT EXISTS idx_visit_exhibit_date
+ON visit(exhibit_id, visit_date);
+
+CREATE INDEX IF NOT EXISTS idx_visit_date
+ON visit(visit_date);
+
+CREATE INDEX IF NOT EXISTS idx_visitor_country
+ON visitor(country);
+
+CREATE INDEX IF NOT EXISTS idx_conservation_last_checked
+ON conservation_record(last_checked);
+
+CREATE TRIGGER IF NOT EXISTS flag_overdue_conservation
+AFTER INSERT ON conservation_record
+BEGIN
+    UPDATE conservation_record
+    SET condition_status = 'Inspection Overdue'
+    WHERE julianday('now') - julianday(last_checked) > 180;
+END;
