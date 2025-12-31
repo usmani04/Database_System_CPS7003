@@ -82,5 +82,60 @@ class MuseumService:
     def get_visitors_by_country(self):
         return self.dal.visitors_by_country()
 
+    def list_museums(self):
+        return self.dal.list_museums()
+
+    def list_exhibits(self):
+        return self.dal.list_exhibits()
+
+    def list_visitors(self):
+        return self.dal.list_visitors()
+
+    def list_visits(self):
+        return self.dal.list_visits()
+    
+    # ---------- ADMIN-ONLY UPDATE / DELETE ----------
+
+    def update_museum(self, museum_id, name, location):
+        if self.user.role != "admin":
+            raise PermissionError("Only admins can update museums")
+
+        return self.dal.update_museum(museum_id, name, location)
+
+    def delete_museum(self, museum_id):
+        if self.user.role != "admin":
+            raise PermissionError("Only admins can delete museums")
+
+        self.dal.delete_museum(museum_id)
+
+    def update_exhibit(self, exhibit_id, title, description):
+        if self.user.role != "admin":
+            raise PermissionError("Only admins can update exhibits")
+
+        return self.dal.update_exhibit(exhibit_id, title, description)
+
+    def delete_exhibit(self, exhibit_id):
+        if self.user.role != "admin":
+            raise PermissionError("Only admins can delete exhibits")
+
+        self.dal.delete_exhibit(exhibit_id)
+
+    # ---------- PUBLIC UPDATE / DELETE ----------
+
+    def update_visitor(self, visitor_id, age, country):
+        return self.dal.update_visitor(visitor_id, age, country)
+
+    def delete_visitor(self, visitor_id):
+        self.dal.delete_visitor(visitor_id)
+
+    def update_visit(self, visit_id, rating):
+        if rating < 1 or rating > 5:
+            raise ValueError("Rating must be between 1 and 5")
+
+        return self.dal.update_visit(visit_id, rating)
+
+    def delete_visit(self, visit_id):
+        self.dal.delete_visit(visit_id)
+
     def close(self):
         self.dal.close()

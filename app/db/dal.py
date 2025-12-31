@@ -39,6 +39,121 @@ class DataAccessLayer:
         self.session.add(visitor)
         self.session.commit()
         return visitor
+    
+    # ---------- READ / LIST ----------
+
+    def list_museums(self):
+        return self.session.query(Museum).all()
+
+    def list_exhibits(self):
+        return (
+            self.session.query(
+                Exhibit.exhibit_id,
+                Exhibit.title,
+                Museum.name
+            )
+            .join(Museum)
+            .all()
+        )
+
+    def list_visitors(self):
+        return self.session.query(Visitor).all()
+
+    def list_visits(self):
+        return (
+            self.session.query(
+                Visit.visit_id,
+                Visitor.full_name,
+                Exhibit.title,
+                Visit.visit_date,
+                Visit.feedback_rating
+            )
+            .join(Visitor)
+            .join(Exhibit)
+            .all()
+        )
+    
+    # ---------- UPDATE ----------
+
+    def update_museum(self, museum_id, name, location):
+        museum = self.session.query(Museum).get(museum_id)
+        if not museum:
+            raise ValueError("Museum not found")
+
+        museum.name = name
+        museum.location = location
+        self.session.commit()
+        return museum
+
+
+    def update_exhibit(self, exhibit_id, title, description):
+        exhibit = self.session.query(Exhibit).get(exhibit_id)
+        if not exhibit:
+            raise ValueError("Exhibit not found")
+
+        exhibit.title = title
+        exhibit.description = description
+        self.session.commit()
+        return exhibit
+
+
+    def update_visitor(self, visitor_id, age, country):
+        visitor = self.session.query(Visitor).get(visitor_id)
+        if not visitor:
+            raise ValueError("Visitor not found")
+
+        visitor.age = age
+        visitor.country = country
+        self.session.commit()
+        return visitor
+
+
+    def update_visit(self, visit_id, rating):
+        visit = self.session.query(Visit).get(visit_id)
+        if not visit:
+            raise ValueError("Visit not found")
+
+        visit.feedback_rating = rating
+        self.session.commit()
+        return visit
+
+
+    # ---------- DELETE ----------
+
+    def delete_museum(self, museum_id):
+        museum = self.session.query(Museum).get(museum_id)
+        if not museum:
+            raise ValueError("Museum not found")
+
+        self.session.delete(museum)
+        self.session.commit()
+
+
+    def delete_exhibit(self, exhibit_id):
+        exhibit = self.session.query(Exhibit).get(exhibit_id)
+        if not exhibit:
+            raise ValueError("Exhibit not found")
+
+        self.session.delete(exhibit)
+        self.session.commit()
+
+
+    def delete_visitor(self, visitor_id):
+        visitor = self.session.query(Visitor).get(visitor_id)
+        if not visitor:
+            raise ValueError("Visitor not found")
+
+        self.session.delete(visitor)
+        self.session.commit()
+
+
+    def delete_visit(self, visit_id):
+        visit = self.session.query(Visit).get(visit_id)
+        if not visit:
+            raise ValueError("Visit not found")
+
+        self.session.delete(visit)
+        self.session.commit()
 
     # ---------- READ ----------
     def get_exhibits_with_museum(self):
