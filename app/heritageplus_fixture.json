@@ -1,0 +1,85 @@
+{
+    "museums": [
+        {
+            "id": 1,
+            "name": "National History Museum",
+            "location": "London"
+        },
+        {
+            "id": 2,
+            "name": "Art & Culture Museum",
+            "location": "London"
+        }
+    ],
+    "exhibits": [
+        {
+            "id": 1,
+            "museum_id": 1,
+            "title": "Ancient Civilizations",
+            "description": "Indus Valley artifacts",
+            "start_date": "2024-01-01",
+            "end_date": "2024-12-31"
+        },
+        {
+            "id": 2,
+            "museum_id": 2,
+            "title": "Modern Art",
+            "description": "Contemporary paintings",
+            "start_date": "2024-02-01",
+            "end_date": "2024-11-30"
+        }
+    ],
+    "visitors": [
+        {
+            "id": 1,
+            "full_name": "Jeniffer",
+            "age": 28,
+            "gender": "Female",
+            "country": "Canada"
+        },
+        {
+            "id": 2,
+            "full_name": "Sara Adam",
+            "age": 32,
+            "gender": "Female",
+            "country": "US"
+        }
+    ],
+    "visits": [
+        {
+            "visit_id": 1,
+            "visitor_id": 1,
+            "exhibit_id": 1,
+            "visit_date": "2025-01-15",
+            "rating": 4
+        },
+        {
+            "visit_id": 2,
+            "visitor_id": 2,
+            "exhibit_id": 1,
+            "visit_date": "2025-02-18",
+            "rating": 5
+        },
+        {
+            "visit_id": 3,
+            "visitor_id": 1,
+            "exhibit_id": 2,
+            "visit_date": "2025-03-10",
+            "rating": 3
+        },
+        {
+            "visit_id": 4,
+            "visitor_id": 2,
+            "exhibit_id": 2,
+            "visit_date": "2025-04-22",
+            "rating": 4
+        },
+        {
+            "visit_id": 5,
+            "visitor_id": 1,
+            "exhibit_id": 1,
+            "visit_date": "2025-05-05",
+            "rating": 5
+        }
+    ]
+}
